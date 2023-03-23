@@ -246,7 +246,9 @@ def post_message():
     if request.method == 'POST':
         data = request.form
         producer = KafkaProducer(bootstrap_servers=['34.28.118.32:9094'], api_version=(0, 10))
-        producer.send('my-topic', json.dumps(data).encode('utf-8'))
+        producer.send('my-topic', json.dumps(data.getlist('customer_id')).encode('utf-8'))
+        producer.send('my-topic', json.dumps(data.getlist('customer_name')).encode('utf-8'))
+        producer.send('my-topic', json.dumps(data.getlist('sanctioned_name')).encode('utf-8'))
         producer.close()
         print(data)
 
