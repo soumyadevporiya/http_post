@@ -14,4 +14,4 @@ spec:
       spec:
         containers:
         - name: http_post
-          image: gcr.io/alien-walker-373503/http_post:latest
+          image: gcr.io/mimetic-parity-378803/http_post:latest
