@@ -4,7 +4,7 @@ from flask import jsonify
 import json
 from kafka import KafkaConsumer
 from flask import request
-
+from kafka import KafkaProducer
 # Required for Kubernetes
 import os
 import pint
@@ -245,8 +245,9 @@ def get_msg_7():
 def post_message():
     if request.method == 'POST':
         data = request.form
-        data_dict = data
-        # password = request.form['password']
+        producer = KafkaProducer(bootstrap_servers=['34.28.118.32:9094'], api_version=(0, 10))
+        producer.send('my-topic', json.dumps(data).encode('utf-8'))
+        producer.close()
         print(data)
 
     return '<h1>invalid credentials!</h1>'
