@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http_post
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: http_post
+  template:
+      metadata:
+        labels:
+          app: http_post
+      spec:
+        containers:
+        - name: http_post
+          image: gcr.io/alien-walker-373503/http_post:latest
