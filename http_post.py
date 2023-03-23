@@ -13,6 +13,8 @@ from kubernetes import client, config, watch
 
 app = Flask(__name__)
 
+data_dict = {}
+
 @app.route('/')
 def hello_world():
     return 'Hello World'
@@ -243,13 +245,15 @@ def get_msg_7():
 def post_message():
     if request.method == 'POST':
         data = request.form
+        data_dict = data
         # password = request.form['password']
         print(data)
 
     return '<h1>invalid credentials!</h1>'
 
-
-
+@app.route('/hello/post_get')
+def get_message():
+    return data_dict
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=80, threaded=True)

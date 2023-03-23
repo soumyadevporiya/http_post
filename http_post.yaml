@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: http_post
+  name: http-post
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: http_post
+      app: http-post
   template:
       metadata:
         labels:
-          app: http_post
+          app: http-post
       spec:
         containers:
-        - name: http_post
+        - name: http-post
           image: gcr.io/mimetic-parity-378803/http_post:latest
