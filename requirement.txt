@@ -4,3 +4,5 @@ kubernetes
 bs4
 kafka-python
 google-cloud-storage
+pandas
+editdistance

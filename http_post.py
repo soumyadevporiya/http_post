@@ -11,9 +11,12 @@ import pint
 import kubernetes
 from kubernetes import client, config, watch
 
+
+import editdistance
+import pandas as pd
+
 app = Flask(__name__)
 
-data_dict = {}
 
 @app.route('/')
 def hello_world():
@@ -244,19 +247,39 @@ def get_msg_7():
 @app.route('/hello/post', methods=['POST'])
 def post_message():
     if request.method == 'POST':
-        data = request.form
+        data_id = request.form
+        data_1 = {'customer_id': data_id.getlist('customer_id'), 'customer_name': data_id.getlist('customer_name')}
+        df_customer = pd.DataFrame(data_1)
+
+        data_2 = {'sanctioned_name': data_id.getlist('sanctioned_name')}
+        df_watchlist = pd.DataFrame(data_2)
+
+        df_customer['key'] = 1
+        df_watchlist['key'] = 1
+
+        df_merged = pd.merge(df_customer, df_watchlist, on='key').drop('key', 1)
+
+        dict_merged = df_merged.to_dict('records')
+
+        print(df_merged)
+        alert = {}
+        i = 0
+
+        for each in dict_merged:
+            score = editdistance.eval(each['customer_name'], each['sanctioned_name'])
+            if score <= 1:
+                i = i + 1
+                # print(each['customer_name'],each['sanctioned_name'],score)
+                alert[str(i)] = dict(zip(('customer_id', 'customer_name', 'sanctioned_name', 'edit_distance'),
+                                         (each['customer_id'], each['customer_name'], each['sanctioned_name'], score)))
+
+        print(alert)
         producer = KafkaProducer(bootstrap_servers=['34.28.118.32:9094'], api_version=(0, 10))
-        producer.send('my-topic', json.dumps(data.getlist('customer_id')).encode('utf-8'))
-        producer.send('my-topic', json.dumps(data.getlist('customer_name')).encode('utf-8'))
-        producer.send('my-topic', json.dumps(data.getlist('sanctioned_name')).encode('utf-8'))
+        producer.send('my-topic', json.dumps(alert).encode('utf-8'))
         producer.close()
-        print(data)
 
     return '<h1>invalid credentials!</h1>'
 
-@app.route('/hello/post_get')
-def get_message():
-    return data_dict
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=80, threaded=True)
