@@ -261,7 +261,7 @@ def post_message():
 
         dict_merged = df_merged.to_dict('records')
 
-        print(df_merged)
+        #print(df_merged)
         alert = {}
         i = 0
 
@@ -273,11 +273,15 @@ def post_message():
                 alert[str(i)] = dict(zip(('customer_id', 'customer_name', 'sanctioned_name', 'edit_distance'),
                                          (each['customer_id'], each['customer_name'], each['sanctioned_name'], score)))
 
-        print(alert)
-        if i >= 1:
+        #print(alert)
+        '''
+                if i >= 1:
             producer = KafkaProducer(bootstrap_servers=['34.28.118.32:9094'], api_version=(0, 10))
             producer.send('my-topic', json.dumps(alert).encode('utf-8'))
             producer.close()
+        
+        '''
+
 
     return '<h1>invalid credentials!</h1>'
 
