@@ -274,13 +274,13 @@ def post_message():
                                          (each['customer_id'], each['customer_name'], each['sanctioned_name'], score)))
 
         #print(alert)
-        '''
-                if i >= 1:
-            producer = KafkaProducer(bootstrap_servers=['34.28.118.32:9094'], api_version=(0, 10))
-            producer.send('my-topic', json.dumps(alert).encode('utf-8'))
+
+        if i >= 1:
+            producer = KafkaProducer(bootstrap_servers=['35.225.83.11:9094'], api_version=(0, 10))
+            producer.send('my-second-topic', json.dumps(alert).encode('utf-8'))
             producer.close()
         
-        '''
+
 
 
     return '<h1>invalid credentials!</h1>'
