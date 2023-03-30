@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: http-post
 spec:
-  replicas: 2
+  replicas: 90
   selector:
     matchLabels:
       app: http-post
@@ -14,4 +14,4 @@ spec:
       spec:
         containers:
         - name: http-post
-          image: gcr.io/mimetic-parity-378803/http_post:latest
+          image: gcr.io/praxis-road-382013/http_post:latest
