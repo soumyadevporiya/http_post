@@ -248,6 +248,7 @@ def get_msg_7():
 @app.route('/hello/post', methods=['POST'])
 def post_message():
     i = 0
+    alert = {}
     if request.method == 'POST':
         data_id = request.form
         data_1 = {'customer_id': data_id.getlist('customer_id'), 'customer_name': data_id.getlist('customer_name')}
@@ -264,7 +265,7 @@ def post_message():
         dict_merged = df_merged.to_dict('records')
 
         #print(df_merged)
-        alert = {}
+
 
 
         for each in dict_merged:
