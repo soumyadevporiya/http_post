@@ -10,6 +10,7 @@ import os
 import pint
 import kubernetes
 from kubernetes import client, config, watch
+import time
 
 
 import editdistance
@@ -246,6 +247,7 @@ def get_msg_7():
 
 @app.route('/hello/post', methods=['POST'])
 def post_message():
+    i = 0
     if request.method == 'POST':
         data_id = request.form
         data_1 = {'customer_id': data_id.getlist('customer_id'), 'customer_name': data_id.getlist('customer_name')}
@@ -263,7 +265,7 @@ def post_message():
 
         #print(df_merged)
         alert = {}
-        i = 0
+
 
         for each in dict_merged:
             score = editdistance.eval(each['customer_name'], each['sanctioned_name'])
@@ -279,12 +281,11 @@ def post_message():
             producer = KafkaProducer(bootstrap_servers=['35.225.83.11:9094'], api_version=(0, 10))
             producer.send('my-second-topic', json.dumps(alert).encode('utf-8'))
             producer.close()
-        
 
+    message = "Finish Time: " + str(int(round(time.time()))) + "           Alert: " + alert.__str__()
 
-
-    return '<h1>invalid credentials!</h1>'
-
+    #return '<h1>message</h1>'
+    return message
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=80, threaded=True)
